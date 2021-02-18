@@ -24,6 +24,7 @@ private:
 
     juce::Slider _tempoSlider;
     juce::Label  _tempoLabel;
+    juce::Label  _tempoValueLabel;
     
     juce::Slider _stepsSlider;
     juce::Label  _stepsLabel;

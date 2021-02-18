@@ -13,8 +13,6 @@
 EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
     setSize (650, 500);
     
     speedAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (p.treeState, "TEMPO", _tempoSlider);
@@ -27,8 +25,15 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
     _tempoSlider.onValueChange = [this, &p]
     {
         audioProcessor.updateTempo ();
+
+        _tempoValueLabel.setText (juce::String (*p.treeState.getRawParameterValue ("TEMPO")), juce::dontSendNotification);
     };
-    _tempoSlider.setPopupDisplayEnabled(true, true, this);
+
+    addAndMakeVisible (_tempoValueLabel);
+    _tempoValueLabel.setJustificationType (juce::Justification::centred);
+    _tempoValueLabel.setFont (16.f);
+    _tempoValueLabel.setInterceptsMouseClicks (false, false);
+    _tempoValueLabel.setText (juce::String (*p.treeState.getRawParameterValue ("TEMPO")), juce::dontSendNotification);
 
     addAndMakeVisible (_tempoLabel);
     _tempoLabel.setText ("Tempo", juce::dontSendNotification);
@@ -82,6 +87,7 @@ void EuclydianAudioProcessorEditor::resized()
 
     _tempoSlider.setBounds (componentInset, componentInset, sliderSize, sliderSize);
     _tempoLabel .setBounds (_tempoSlider.getX (), _tempoSlider.getBottom () - componentInset, sliderSize, 20);
+    _tempoValueLabel.setBounds (_tempoSlider.getBounds ());
     
     _stepsSlider.setBounds (getLocalBounds().getWidth() - (componentInset + sliderSize), componentInset, sliderSize, sliderSize);
     _stepsLabel.setBounds (_stepsSlider.getX (), _stepsSlider.getBottom () - componentInset, sliderSize, 20);
