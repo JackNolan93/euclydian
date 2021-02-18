@@ -11,7 +11,7 @@
 
 //==============================================================================
 EuclydianAudioProcessor::EuclydianAudioProcessor()
-     : AudioProcessor (BusesProperties())
+     : AudioProcessor (BusesProperties().withInput("Input", juce::AudioChannelSet::mono(), true))
 {
     addParameter (speed = new juce::AudioParameterFloat ("speed", "Arpeggiator Speed", 0.0, 1.0, 0.5));
 }
@@ -96,9 +96,6 @@ bool EuclydianAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 
 void EuclydianAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    // the audio buffer in a midi effect will have zero channels!
-    jassert (buffer.getNumChannels() == 0);
-
     // however we use the buffer to get timing information
     auto numSamples = buffer.getNumSamples();
 
