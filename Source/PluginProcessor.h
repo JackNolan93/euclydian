@@ -52,11 +52,14 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    
+    juce::AudioProcessorValueTreeState treeState;
 
 private:
     //==============================================================================
     
-    juce::AudioParameterFloat* speed;
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameters ();
+    
     int currentNote, lastNoteValue;
     int time;
     float rate;

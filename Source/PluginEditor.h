@@ -32,10 +32,11 @@ private:
     // access the processor object that created it.
     EuclydianAudioProcessor & audioProcessor;
 
-    juce::Slider _stepsOnSlider;
-    juce::Label  _stepsOnLabel;
-    juce::Label  _stepsOnValue;
-
+    juce::Slider _speedSlider;
+    juce::Label  _speedLabel;
+    
+    std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> speedAttachment;
+    
     static constexpr int componentInset = 10;
 
 

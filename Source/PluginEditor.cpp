@@ -16,15 +16,18 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (600, 450);
+    
+    speedAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (p.treeState, "SPEED", _speedSlider);
 
-    addAndMakeVisible (_stepsOnSlider);
-    _stepsOnSlider.setRange (1, 16);
-    _stepsOnSlider.setSliderStyle (juce::Slider::SliderStyle::RotaryVerticalDrag);
-    _stepsOnSlider.setTextBoxStyle (juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
-    _stepsOnSlider.onValueChange = [this] {  };
+    addAndMakeVisible (_speedSlider);
+    _speedSlider.setRange (0.0, 1.0);
+    _speedSlider.setValue (0.5);
+    _speedSlider.setSliderStyle (juce::Slider::SliderStyle::RotaryVerticalDrag);
+    _speedSlider.setTextBoxStyle (juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    _speedSlider.onValueChange = [this] {  };
 
-    addAndMakeVisible (_stepsOnLabel);
-    _stepsOnLabel.setText ("Num Steps On", juce::dontSendNotification);
+    addAndMakeVisible (_speedLabel);
+    _speedLabel.setText ("Num Steps On", juce::dontSendNotification);
 }
 
 EuclydianAudioProcessorEditor::~EuclydianAudioProcessorEditor()
@@ -46,6 +49,6 @@ void EuclydianAudioProcessorEditor::resized()
 {
     auto sliderSize = 100;
 
-    _stepsOnSlider.setBounds (componentInset, componentInset, sliderSize, sliderSize);
-    _stepsOnLabel .setBounds (_stepsOnSlider.getX (), _stepsOnSlider.getBottom (), sliderSize, 30);
+    _speedSlider.setBounds (componentInset, componentInset, sliderSize, sliderSize);
+    _speedLabel .setBounds (_speedSlider.getX (), _speedSlider.getBottom (), sliderSize, 30);
 }

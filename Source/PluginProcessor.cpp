@@ -11,9 +11,9 @@
 
 //==============================================================================
 EuclydianAudioProcessor::EuclydianAudioProcessor()
-     : AudioProcessor (BusesProperties().withInput("Input", juce::AudioChannelSet::mono(), true))
+     : AudioProcessor (BusesProperties().withInput("Input", juce::AudioChannelSet::mono(), true)),
+        treeState(*this, nullptr, "Parameters", createParameters())
 {
-    addParameter (speed = new juce::AudioParameterFloat ("speed", "Arpeggiator Speed", 0.0, 1.0, 0.5));
 }
 
 EuclydianAudioProcessor::~EuclydianAudioProcessor()
@@ -99,6 +99,7 @@ void EuclydianAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     // however we use the buffer to get timing information
     auto numSamples = buffer.getNumSamples();
 
+    auto speed = treeState.getRawParameterValue ("SPEED");
     // get note duration
     auto noteDuration = static_cast<int> (std::ceil (rate * 0.25f * (0.1f + (1.0f - (*speed)))));
 
@@ -148,12 +149,12 @@ juce::AudioProcessorEditor* EuclydianAudioProcessor::createEditor()
 //==============================================================================
 void EuclydianAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    juce::MemoryOutputStream (destData, true).writeFloat (*speed);
+    //juce::MemoryOutputStream (destData, true).writeFloat (*speed);
 }
 
 void EuclydianAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    speed->setValueNotifyingHost (juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat());
+    //speed->setValueNotifyingHost (juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat());
 }
 
 //==============================================================================
@@ -161,4 +162,15 @@ void EuclydianAudioProcessor::setStateInformation (const void* data, int sizeInB
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new EuclydianAudioProcessor();
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout EuclydianAudioProcessor::createParameters ()
+{
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
+    
+    parameters.push_back (std::make_unique<juce::AudioParameterInt>("STEPS", "Steps Slider", 1, 16, 1));
+    
+    parameters.push_back (std::make_unique<juce::AudioParameterFloat>("SPEED", "Speed Slider", 0.0, 1.0, 0.5));
+    
+    return { parameters.begin (), parameters.end () };
 }
