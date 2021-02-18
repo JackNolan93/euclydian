@@ -18,6 +18,8 @@ void EuclydianComponent::paint (juce::Graphics & g)
 {
     g.setColour (juce::Colours::white);
 
+    _centerPoints.clear ();
+
     auto radius = (getWidth () - 20) / 2;
     auto centreX = 10 + radius;
     auto centreY = 10 + radius;
@@ -33,6 +35,7 @@ void EuclydianComponent::paint (juce::Graphics & g)
     for (int i = 0; i < _numSteps; ++i)
     {
         auto angleInRadians = i * ((2 * juce::MathConstants< float >::pi) / _numSteps);
+        
         auto x = centreX + cos (angleInRadians) * radius;
         auto y = centreY + sin (angleInRadians) * radius;
         g.setColour (juce::Colours::white);
@@ -76,8 +79,11 @@ void EuclydianComponent::paint (juce::Graphics & g)
 
 void EuclydianComponent::setNumOnSteps (int numOnSteps)
 {
-    _numOnSteps = numOnSteps;
-    caluclateOnSteps ();
+    if (_numOnSteps != numOnSteps)
+    {
+        _numOnSteps = numOnSteps;
+        caluclateOnSteps ();
+    }
 }
 
 void EuclydianComponent::caluclateOnSteps ()

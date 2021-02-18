@@ -35,7 +35,10 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
     _stepsSlider.setRange (1, 16);
     _stepsSlider.setSliderStyle (juce::Slider::SliderStyle::RotaryVerticalDrag);
     _stepsSlider.setTextBoxStyle (juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
-    _stepsSlider.onValueChange = [this] {  };
+    _stepsSlider.onValueChange = [this]
+    {
+        _euclydianComponent.setNumOnSteps (int (_stepsSlider.getValue ()));
+    };
 
     addAndMakeVisible (_stepsLabel);
     _stepsLabel.setText ("Number Of Steps", juce::dontSendNotification);
