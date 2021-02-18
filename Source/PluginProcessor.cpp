@@ -79,6 +79,8 @@ void EuclydianAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     lastNoteValue = -1;
     time = 0;
     rate = static_cast<float> (sampleRate);
+
+    updateSteps ();
 }
 
 void EuclydianAudioProcessor::releaseResources()
@@ -101,7 +103,7 @@ void EuclydianAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
     auto speed = treeState.getRawParameterValue ("SPEED");
     // get note duration
-    auto noteDuration = static_cast<int> (std::ceil (rate * 0.25f * (0.1f + (1.0f - (*speed)))));
+    auto noteDuration = static_cast<int> (std::ceil (rate * _currentDuration * (0.1f + (1.0f - (*speed)))));
 
     for (const auto metadata : midiMessages)
     {
@@ -129,6 +131,12 @@ void EuclydianAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
             midiMessages.addEvent (juce::MidiMessage::noteOn  (1, lastNoteValue, (juce::uint8) 127), offset);
         }
 
+        if (_noteDurationIndex + 1 >= _noteDurations.size ())
+            _noteDurationIndex = 0;
+        else
+            ++_noteDurationIndex;
+
+        _currentDuration = _noteDurations [_noteDurationIndex];
     }
 
     time = (time + numSamples) % noteDuration;
@@ -175,8 +183,26 @@ juce::AudioProcessorValueTreeState::ParameterLayout EuclydianAudioProcessor::cre
     return { parameters.begin (), parameters.end () };
 }
 
-int EuclydianAudioProcessor::updateSteps ()
+void EuclydianAudioProcessor::updateSteps ()
 {
     float rawStep = *treeState.getRawParameterValue ("STEPS");
-    currentSteps = juce::roundToInt (rawStep);
+    _currentSteps = juce::roundToInt (rawStep);
+
+    _noteDurations.clear ();
+
+    auto interval = float (_totalSteps) / float (_currentSteps);
+
+    for (int i = 0; i < _currentSteps; ++i)
+    {
+        auto stepPosition = juce::roundToInt (interval * i);
+        auto nextStepPostion = i + 1 < _currentSteps ? juce::roundToInt (interval * (i + 1)) : 16;
+
+        float stepLength = nextStepPostion - stepPosition;
+
+        stepLength = stepLength / float (_totalSteps);
+
+        _noteDurations.add (stepLength);
+    }
+
+    _currentDuration = _noteDurations [0];
 }

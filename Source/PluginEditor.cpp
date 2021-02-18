@@ -38,6 +38,7 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
     _stepsSlider.onValueChange = [this]
     {
         _euclydianComponent.setNumOnSteps (int (_stepsSlider.getValue ()));
+        audioProcessor.updateSteps ();
     };
 
     addAndMakeVisible (_stepsLabel);

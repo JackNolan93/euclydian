@@ -55,19 +55,25 @@ public:
     
     juce::AudioProcessorValueTreeState treeState;
 
+    void updateSteps ();
+
 private:
-    //==============================================================================
-    
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EuclydianAudioProcessor);
+
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters ();
     
     int currentNote, lastNoteValue;
     int time;
     float rate;
     juce::SortedSet<int> notes;
-    
-    int currentSteps = 0;
-    
-    int updateSteps ();
-    
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EuclydianAudioProcessor)
+
+    int _currentSteps = 0;
+    int _totalSteps = 16;
+
+    int _noteDurationIndex = 0;
+    float _currentDuration = 0;
+
+    juce::Array <float> _noteDurations;
+
 };
