@@ -48,6 +48,7 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
 
 
     addAndMakeVisible (_euclydianComponent);
+    _euclydianComponent.setNumOnSteps (int (_stepsSlider.getValue ()));
 }
 
 EuclydianAudioProcessorEditor::~EuclydianAudioProcessorEditor()
