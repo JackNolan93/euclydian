@@ -81,6 +81,7 @@ void EuclydianAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     rate = static_cast<float> (sampleRate);
 
     updateSteps ();
+    updateTempo ();
 }
 
 void EuclydianAudioProcessor::releaseResources()
@@ -100,10 +101,9 @@ void EuclydianAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 {
     // however we use the buffer to get timing information
     auto numSamples = buffer.getNumSamples();
-
-    auto speed = treeState.getRawParameterValue ("SPEED");
+    
     // get note duration
-    auto noteDuration = static_cast<int> (std::ceil (rate * _currentDuration * (0.001f + (1.0f - (*speed)))));
+    auto noteDuration = static_cast<int> (std::ceil (_currentDuration * barSamples));
 
     for (const auto metadata : midiMessages)
     {
@@ -160,13 +160,13 @@ juce::AudioProcessorEditor* EuclydianAudioProcessor::createEditor()
 //==============================================================================
 void EuclydianAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    juce::MemoryOutputStream (destData, true).writeFloat (*treeState.getRawParameterValue ("SPEED"));
+    juce::MemoryOutputStream (destData, true).writeFloat (*treeState.getRawParameterValue ("TEMPO"));
     juce::MemoryOutputStream (destData, true).writeInt (*treeState.getRawParameterValue ("STEPS"));
 }
 
 void EuclydianAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    treeState.getParameter("SPEED")->setValueNotifyingHost (juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readFloat());
+    treeState.getParameter("TEMPO")->setValueNotifyingHost (juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readFloat());
     treeState.getParameter("STEPS")->setValueNotifyingHost (juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readInt());
 }
 
@@ -181,10 +181,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout EuclydianAudioProcessor::cre
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
     
-    parameters.push_back (std::make_unique<juce::AudioParameterFloat>("SPEED", "Speed Slider", 0.0, 1.0, 0.5));
+    parameters.push_back (std::make_unique<juce::AudioParameterFloat>("TEMPO", "Speed Slider", 20.0, 200.0, 120.0));
     parameters.push_back (std::make_unique<juce::AudioParameterInt>("STEPS", "Steps Slider", 1, 16, 1));
 
-    
     return { parameters.begin (), parameters.end () };
 }
 
@@ -209,4 +208,11 @@ void EuclydianAudioProcessor::updateSteps ()
     }
 
     _currentDuration = _noteDurations [0];
+}
+
+void EuclydianAudioProcessor::updateTempo()
+{
+    auto tempo = treeState.getRawParameterValue ("TEMPO");
+    float beatSamples = (60.0 / *tempo) * rate;
+    barSamples = beatSamples * 4;
 }

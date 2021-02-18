@@ -22,8 +22,8 @@ private:
 
     EuclydianAudioProcessor & audioProcessor;
 
-    juce::Slider _speedSlider;
-    juce::Label  _speedLabel;
+    juce::Slider _tempoSlider;
+    juce::Label  _tempoLabel;
     
     juce::Slider _stepsSlider;
     juce::Label  _stepsLabel;

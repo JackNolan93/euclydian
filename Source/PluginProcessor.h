@@ -56,6 +56,7 @@ public:
     juce::AudioProcessorValueTreeState treeState;
 
     void updateSteps ();
+    void updateTempo ();
 
     std::function <void (int)> _stepChange;
 
@@ -75,6 +76,8 @@ private:
 
     int _noteDurationIndex = 0;
     float _currentDuration = 0;
+    
+    int barSamples = 0;
 
     juce::Array <float> _noteDurations;
 

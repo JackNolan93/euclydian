@@ -17,20 +17,23 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
     // editor's size to whatever you need it to be.
     setSize (650, 500);
     
-    speedAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (p.treeState, "SPEED", _speedSlider);
+    speedAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (p.treeState, "TEMPO", _tempoSlider);
     stepsAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (p.treeState, "STEPS", _stepsSlider);
 
-    addAndMakeVisible (_speedSlider);
-    _speedSlider.setRange (0.0, 1.0);
-    _speedSlider.setSliderStyle (juce::Slider::SliderStyle::RotaryVerticalDrag);
-    _speedSlider.setTextBoxStyle (juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
-    _speedSlider.onValueChange = [this] {  };
-    _speedSlider.setPopupDisplayEnabled(true, true, this);
+    addAndMakeVisible (_tempoSlider);
+    _tempoSlider.setRange (20.0, 200.0);
+    _tempoSlider.setSliderStyle (juce::Slider::SliderStyle::RotaryVerticalDrag);
+    _tempoSlider.setTextBoxStyle (juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    _tempoSlider.onValueChange = [this, &p]
+    {
+        audioProcessor.updateTempo ();
+    };
+    _tempoSlider.setPopupDisplayEnabled(true, true, this);
 
-    addAndMakeVisible (_speedLabel);
-    _speedLabel.setText ("Tempo", juce::dontSendNotification);
-    _speedLabel.setJustificationType (juce::Justification::centred);
-    _speedLabel.setFont (12.f);
+    addAndMakeVisible (_tempoLabel);
+    _tempoLabel.setText ("Tempo", juce::dontSendNotification);
+    _tempoLabel.setJustificationType (juce::Justification::centred);
+    _tempoLabel.setFont (12.f);
     
     addAndMakeVisible (_stepsSlider);
     _stepsSlider.setRange (1, 16);
@@ -70,8 +73,8 @@ void EuclydianAudioProcessorEditor::resized()
 {
     auto sliderSize = 100;
 
-    _speedSlider.setBounds (componentInset, componentInset, sliderSize, sliderSize);
-    _speedLabel .setBounds (_speedSlider.getX (), _speedSlider.getBottom () - componentInset, sliderSize, 20);
+    _tempoSlider.setBounds (componentInset, componentInset, sliderSize, sliderSize);
+    _tempoLabel .setBounds (_tempoSlider.getX (), _tempoSlider.getBottom () - componentInset, sliderSize, 20);
 
     _euclydianComponent. setBounds (getWidth () / 4 ,
                                     getHeight () / 2 - getWidth () / 4,
