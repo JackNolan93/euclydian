@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="i5Fjyc" name="Euclydian" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginWantsMidiIn">
+              pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginProducesMidiOut,pluginWantsMidiIn">
   <MAINGROUP id="SegeBS" name="Euclydian">
     <GROUP id="{B3F95B88-7842-CD6D-0EED-E50C24169FF4}" name="Source">
       <FILE id="roB9oM" name="PluginProcessor.cpp" compile="1" resource="0"
