@@ -18,6 +18,7 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
     setSize (600, 450);
     
     speedAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (p.treeState, "SPEED", _speedSlider);
+    stepsAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (p.treeState, "STEPS", _stepsSlider);
 
     addAndMakeVisible (_speedSlider);
     _speedSlider.setRange (0.0, 1.0);
@@ -27,6 +28,15 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
 
     addAndMakeVisible (_speedLabel);
     _speedLabel.setText ("Tempo", juce::dontSendNotification);
+    
+    addAndMakeVisible (_stepsSlider);
+    _stepsSlider.setRange (1, 16);
+    _stepsSlider.setSliderStyle (juce::Slider::SliderStyle::RotaryVerticalDrag);
+    _stepsSlider.setTextBoxStyle (juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    _stepsSlider.onValueChange = [this] {  };
+
+    addAndMakeVisible (_stepsLabel);
+    _stepsLabel.setText ("Number Of Steps", juce::dontSendNotification);
 
     addAndMakeVisible (_euclydianComponent);
 }
@@ -48,6 +58,14 @@ void EuclydianAudioProcessorEditor::resized()
 
     _speedSlider.setBounds (componentInset, componentInset, sliderSize, sliderSize);
     _speedLabel .setBounds (_speedSlider.getX (), _speedSlider.getBottom (), sliderSize, 30);
+
+    _euclydianComponent. setBounds (getWidth () / 4 ,
+                                    getHeight () / 2 - getWidth () / 4,
+                                    getWidth () / 2,
+                                    getWidth () / 2);
+    
+    _stepsSlider.setBounds (getLocalBounds().getWidth() - (componentInset + sliderSize), componentInset, sliderSize, sliderSize);
+    _stepsLabel.setBounds (_stepsSlider.getX (), _stepsSlider.getBottom (), sliderSize, 30);
 
     _euclydianComponent. setBounds (getWidth () / 4 ,
                                     getHeight () / 2 - getWidth () / 4,

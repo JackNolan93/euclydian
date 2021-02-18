@@ -25,7 +25,11 @@ private:
     juce::Slider _speedSlider;
     juce::Label  _speedLabel;
     
+    juce::Slider _stepsSlider;
+    juce::Label  _stepsLabel;
+    
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> speedAttachment;
+    std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> stepsAttachment;
 
     EuclydianComponent _euclydianComponent;
 

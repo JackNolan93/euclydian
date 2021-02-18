@@ -65,5 +65,9 @@ private:
     float rate;
     juce::SortedSet<int> notes;
     
+    int currentSteps = 0;
+    
+    int updateSteps ();
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EuclydianAudioProcessor)
 };

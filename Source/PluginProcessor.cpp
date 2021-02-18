@@ -168,9 +168,15 @@ juce::AudioProcessorValueTreeState::ParameterLayout EuclydianAudioProcessor::cre
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
     
-    parameters.push_back (std::make_unique<juce::AudioParameterInt>("STEPS", "Steps Slider", 1, 16, 1));
-    
     parameters.push_back (std::make_unique<juce::AudioParameterFloat>("SPEED", "Speed Slider", 0.0, 1.0, 0.5));
+    parameters.push_back (std::make_unique<juce::AudioParameterInt>("STEPS", "Steps Slider", 1, 16, 1));
+
     
     return { parameters.begin (), parameters.end () };
+}
+
+int EuclydianAudioProcessor::updateSteps ()
+{
+    float rawStep = *treeState.getRawParameterValue ("STEPS");
+    currentSteps = juce::roundToInt (rawStep);
 }
