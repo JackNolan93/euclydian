@@ -20,14 +20,17 @@ void EuclydianComponent::paint (juce::Graphics & g)
 
     _centerPoints.clear ();
 
-    auto radius = (getWidth () - 20) / 2;
-    auto centreX = 10 + radius;
-    auto centreY = 10 + radius;
+    auto radius = (getWidth () - 30) / 2;
+    auto centreX = 15 + radius;
+    auto centreY = 15 + radius;
 
-    auto stepMarkerSize = 14;
+    auto stepMarkerSize = 12;
+    auto onMarkerSize = 24;
 
-    g.drawEllipse (10,
-                   10,
+    _stepIndex = 0;
+
+    g.drawEllipse (15,
+                   15,
                    radius * 2,
                    radius * 2,
                    1.0);
@@ -49,6 +52,14 @@ void EuclydianComponent::paint (juce::Graphics & g)
 
             std::pair <int, int> newPoint = {int (x), int (y)};
             _centerPoints.add (newPoint);
+
+            juce::Path newPath;
+            newPath.addPieSegment (x - onMarkerSize / 2, y - onMarkerSize / 2, onMarkerSize, onMarkerSize, 0, 2 * juce::MathConstants< float >::pi, 0.7);
+
+            if (_stepIndex == _onIndex)
+                g.fillPath (newPath);
+
+            ++_stepIndex;
         }
         else
         {
@@ -69,6 +80,7 @@ void EuclydianComponent::paint (juce::Graphics & g)
 
     for (int i = 0; i < _centerPoints.size (); ++i)
     {
+        g.setColour (juce::Colours::white);
         auto start = _centerPoints [i];
         auto end = i + 1 >= _centerPoints.size () ? _centerPoints [0] : _centerPoints [i + 1];
 
@@ -98,4 +110,12 @@ void EuclydianComponent::caluclateOnSteps ()
     }
 
     repaint ();
+}
+
+void EuclydianComponent::setStepOnIndex (int onIndex)
+{
+    _onIndex = onIndex;
+
+    juce::MessageManager::callAsync ([this] ()
+     { repaint (); });
 }

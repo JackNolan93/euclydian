@@ -15,7 +15,7 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (600, 450);
+    setSize (650, 500);
     
     speedAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (p.treeState, "SPEED", _speedSlider);
     stepsAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (p.treeState, "STEPS", _stepsSlider);
@@ -51,6 +51,8 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
 
     addAndMakeVisible (_euclydianComponent);
     _euclydianComponent.setNumOnSteps (int (_stepsSlider.getValue ()));
+
+    p._stepChange = [this] (int stepIndex) { _euclydianComponent.setStepOnIndex (stepIndex); };
 }
 
 EuclydianAudioProcessorEditor::~EuclydianAudioProcessorEditor()

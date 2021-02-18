@@ -103,7 +103,7 @@ void EuclydianAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
     auto speed = treeState.getRawParameterValue ("SPEED");
     // get note duration
-    auto noteDuration = static_cast<int> (std::ceil (rate * _currentDuration * (0.1f + (1.0f - (*speed)))));
+    auto noteDuration = static_cast<int> (std::ceil (rate * _currentDuration * (0.001f + (1.0f - (*speed)))));
 
     for (const auto metadata : midiMessages)
     {
@@ -137,6 +137,9 @@ void EuclydianAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
             ++_noteDurationIndex;
 
         _currentDuration = _noteDurations [_noteDurationIndex];
+        
+        if (_stepChange)
+            _stepChange (_noteDurationIndex);
     }
 
     time = (time + numSamples) % noteDuration;
@@ -200,7 +203,6 @@ void EuclydianAudioProcessor::updateSteps ()
         auto nextStepPostion = i + 1 < _currentSteps ? juce::roundToInt (interval * (i + 1)) : 16;
 
         float stepLength = nextStepPostion - stepPosition;
-
         stepLength = stepLength / float (_totalSteps);
 
         _noteDurations.add (stepLength);
