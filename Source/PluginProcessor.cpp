@@ -185,8 +185,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout EuclydianAudioProcessor::cre
 
 void EuclydianAudioProcessor::updateSteps ()
 {
-    float rawStep = *treeState.getRawParameterValue ("STEPS");
-    _currentSteps = juce::roundToInt (rawStep);
+    int rawStep = *treeState.getRawParameterValue ("STEPS");
+    _currentSteps = rawStep;
 
     _noteDurations.clear ();
 

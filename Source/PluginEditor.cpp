@@ -35,9 +35,9 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
     _stepsSlider.setRange (1, 16);
     _stepsSlider.setSliderStyle (juce::Slider::SliderStyle::RotaryVerticalDrag);
     _stepsSlider.setTextBoxStyle (juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
-    _stepsSlider.onValueChange = [this]
+    _stepsSlider.onValueChange = [this, &p]
     {
-        _euclydianComponent.setNumOnSteps (int (_stepsSlider.getValue ()));
+        _euclydianComponent.setNumOnSteps (*p.treeState.getRawParameterValue ("STEPS"));
         audioProcessor.updateSteps ();
     };
 
