@@ -181,8 +181,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout EuclydianAudioProcessor::cre
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
     
-    parameters.push_back (std::make_unique<juce::AudioParameterFloat>("TEMPO", "Speed Slider", 20.0, 200.0, 120.0));
-    parameters.push_back (std::make_unique<juce::AudioParameterInt>("STEPS", "Steps Slider", 1, 16, 1));
+    parameters.push_back (std::make_unique<juce::AudioParameterInt>("TEMPO", "Tempo", 20, 200, 120));
+    parameters.push_back (std::make_unique<juce::AudioParameterInt>("STEPS", "No. Steps", 1, 16, 1));
 
     return { parameters.begin (), parameters.end () };
 }

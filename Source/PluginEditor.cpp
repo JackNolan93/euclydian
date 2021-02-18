@@ -18,6 +18,11 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
     speedAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (p.treeState, "TEMPO", _tempoSlider);
     stepsAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (p.treeState, "STEPS", _stepsSlider);
 
+    _tempoSlider.setColour (juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::white);
+    _tempoSlider.setColour (juce::Slider::ColourIds::thumbColourId, juce::Colours::white);
+    _stepsSlider.setColour (juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::white);
+    _stepsSlider.setColour (juce::Slider::ColourIds::thumbColourId, juce::Colours::white);
+
     addAndMakeVisible (_tempoSlider);
     _tempoSlider.setRange (20.0, 200.0);
     _tempoSlider.setSliderStyle (juce::Slider::SliderStyle::RotaryVerticalDrag);
@@ -25,13 +30,12 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
     _tempoSlider.onValueChange = [this, &p]
     {
         audioProcessor.updateTempo ();
-
         _tempoValueLabel.setText (juce::String (*p.treeState.getRawParameterValue ("TEMPO")), juce::dontSendNotification);
     };
 
     addAndMakeVisible (_tempoValueLabel);
     _tempoValueLabel.setJustificationType (juce::Justification::centred);
-    _tempoValueLabel.setFont (16.f);
+    _tempoValueLabel.setFont (24.f);
     _tempoValueLabel.setInterceptsMouseClicks (false, false);
     _tempoValueLabel.setText (juce::String (*p.treeState.getRawParameterValue ("TEMPO")), juce::dontSendNotification);
 
@@ -41,7 +45,7 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
     _tempoLabel.setFont (12.f);
     
     addAndMakeVisible (_stepsSlider);
-    _stepsSlider.setRange (1, 16);
+    _stepsSlider.setRange (1.0, 16.0);
     _stepsSlider.setSliderStyle (juce::Slider::SliderStyle::RotaryVerticalDrag);
     _stepsSlider.setTextBoxStyle (juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     _stepsSlider.onValueChange = [this, &p]
@@ -54,7 +58,7 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
 
     addAndMakeVisible (_numStepsLabel);
     _numStepsLabel.setJustificationType (juce::Justification::centred);
-    _numStepsLabel.setFont (16.f);
+    _numStepsLabel.setFont (24.f);
     _numStepsLabel.setInterceptsMouseClicks (false, false);
     _numStepsLabel.setText (juce::String (*p.treeState.getRawParameterValue ("STEPS")), juce::dontSendNotification);
 
@@ -83,7 +87,7 @@ void EuclydianAudioProcessorEditor::paint (juce::Graphics& g)
 
 void EuclydianAudioProcessorEditor::resized()
 {
-    auto sliderSize = 100;
+    auto sliderSize = 130;
 
     _tempoSlider.setBounds (componentInset, componentInset, sliderSize, sliderSize);
     _tempoLabel .setBounds (_tempoSlider.getX (), _tempoSlider.getBottom () - componentInset, sliderSize, 20);
