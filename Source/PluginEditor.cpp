@@ -43,8 +43,15 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
     {
         _euclydianComponent.setNumOnSteps (*p.treeState.getRawParameterValue ("STEPS"));
         audioProcessor.updateSteps ();
+
+        _numStepsLabel.setText (juce::String (*p.treeState.getRawParameterValue ("STEPS")), juce::dontSendNotification);
     };
-    _stepsSlider.setPopupDisplayEnabled(true, true, this);
+
+    addAndMakeVisible (_numStepsLabel);
+    _numStepsLabel.setJustificationType (juce::Justification::centred);
+    _numStepsLabel.setFont (16.f);
+    _numStepsLabel.setInterceptsMouseClicks (false, false);
+    _numStepsLabel.setText (juce::String (*p.treeState.getRawParameterValue ("STEPS")), juce::dontSendNotification);
 
     addAndMakeVisible (_stepsLabel);
     _stepsLabel.setText ("Number Of Steps", juce::dontSendNotification);
@@ -75,14 +82,10 @@ void EuclydianAudioProcessorEditor::resized()
 
     _tempoSlider.setBounds (componentInset, componentInset, sliderSize, sliderSize);
     _tempoLabel .setBounds (_tempoSlider.getX (), _tempoSlider.getBottom () - componentInset, sliderSize, 20);
-
-    _euclydianComponent. setBounds (getWidth () / 4 ,
-                                    getHeight () / 2 - getWidth () / 4,
-                                    getWidth () / 2,
-                                    getWidth () / 2);
     
     _stepsSlider.setBounds (getLocalBounds().getWidth() - (componentInset + sliderSize), componentInset, sliderSize, sliderSize);
-    _stepsLabel.setBounds (_stepsSlider.getX (), _stepsSlider.getBottom (), sliderSize, 30);
+    _stepsLabel.setBounds (_stepsSlider.getX (), _stepsSlider.getBottom () - componentInset, sliderSize, 20);
+    _numStepsLabel.setBounds (_stepsSlider.getBounds ());
 
     _euclydianComponent. setBounds (getWidth () / 4 ,
                                     getHeight () / 2 - getWidth () / 4,
