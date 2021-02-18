@@ -28,6 +28,8 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
 
     addAndMakeVisible (_speedLabel);
     _speedLabel.setText ("Tempo", juce::dontSendNotification);
+    _speedLabel.setJustificationType (juce::Justification::centred);
+    _speedLabel.setFont (12.f);
     
     addAndMakeVisible (_stepsSlider);
     _stepsSlider.setRange (1, 16);
@@ -37,6 +39,9 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
 
     addAndMakeVisible (_stepsLabel);
     _stepsLabel.setText ("Number Of Steps", juce::dontSendNotification);
+    _stepsLabel.setJustificationType (juce::Justification::centred);
+    _stepsLabel.setFont (12.f);
+
 
     addAndMakeVisible (_euclydianComponent);
 }
@@ -57,7 +62,7 @@ void EuclydianAudioProcessorEditor::resized()
     auto sliderSize = 100;
 
     _speedSlider.setBounds (componentInset, componentInset, sliderSize, sliderSize);
-    _speedLabel .setBounds (_speedSlider.getX (), _speedSlider.getBottom (), sliderSize, 30);
+    _speedLabel .setBounds (_speedSlider.getX (), _speedSlider.getBottom () - componentInset, sliderSize, 20);
 
     _euclydianComponent. setBounds (getWidth () / 4 ,
                                     getHeight () / 2 - getWidth () / 4,
