@@ -25,6 +25,7 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
     _speedSlider.setSliderStyle (juce::Slider::SliderStyle::RotaryVerticalDrag);
     _speedSlider.setTextBoxStyle (juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     _speedSlider.onValueChange = [this] {  };
+    _speedSlider.setPopupDisplayEnabled(true, true, this);
 
     addAndMakeVisible (_speedLabel);
     _speedLabel.setText ("Tempo", juce::dontSendNotification);
@@ -40,6 +41,7 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
         _euclydianComponent.setNumOnSteps (*p.treeState.getRawParameterValue ("STEPS"));
         audioProcessor.updateSteps ();
     };
+    _stepsSlider.setPopupDisplayEnabled(true, true, this);
 
     addAndMakeVisible (_stepsLabel);
     _stepsLabel.setText ("Number Of Steps", juce::dontSendNotification);
