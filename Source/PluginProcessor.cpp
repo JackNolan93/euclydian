@@ -149,12 +149,12 @@ juce::AudioProcessorEditor* EuclydianAudioProcessor::createEditor()
 //==============================================================================
 void EuclydianAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    //juce::MemoryOutputStream (destData, true).writeFloat (*speed);
+    juce::MemoryOutputStream (destData, true).writeFloat (*treeState.getRawParameterValue ("SPEED"));
 }
 
 void EuclydianAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    //speed->setValueNotifyingHost (juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat());
+    treeState.getParameter("SPEED")->setValueNotifyingHost (juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readFloat());
 }
 
 //==============================================================================

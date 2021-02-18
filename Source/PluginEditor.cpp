@@ -21,7 +21,6 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
 
     addAndMakeVisible (_speedSlider);
     _speedSlider.setRange (0.0, 1.0);
-    _speedSlider.setValue (0.5);
     _speedSlider.setSliderStyle (juce::Slider::SliderStyle::RotaryVerticalDrag);
     _speedSlider.setTextBoxStyle (juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     _speedSlider.onValueChange = [this] {  };
