@@ -13,7 +13,7 @@
 EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    setSize (650, 500);
+    setSize (500, 600);
     
     speedAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (p.treeState, "TEMPO", _tempoSlider);
     stepsAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (p.treeState, "STEPS", _stepsSlider);
@@ -67,9 +67,14 @@ EuclydianAudioProcessorEditor::EuclydianAudioProcessorEditor (EuclydianAudioProc
     _stepsLabel.setJustificationType (juce::Justification::centred);
     _stepsLabel.setFont (12.f);
 
-
     addAndMakeVisible (_euclydianComponent);
     _euclydianComponent.setNumOnSteps (int (_stepsSlider.getValue ()));
+
+    addAndMakeVisible (_title);
+    _title.setFont (38.f);
+    _title.setText ("Euclydian", juce::dontSendNotification);
+    _title.setJustificationType (juce::Justification::centred);
+    _title.setColour (juce::Label::textColourId, getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
 
     p._stepChange = [this] (int stepIndex) { _euclydianComponent.setStepOnIndex (stepIndex); };
 }
@@ -83,22 +88,38 @@ void EuclydianAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+
+    g.setColour (juce::Colours::white);
+    g.drawRoundedRectangle (componentInset, componentInset, getWidth () - componentInset * 2, 165, 5, 1.f);
+    g.drawRoundedRectangle (componentInset * 2, componentInset * 2, 130, 145, 5,  1.f);
+    g.drawRoundedRectangle (130 + componentInset * 3, componentInset * 2, 130, 145, 5,  1.f);
+
+    g.fillRoundedRectangle (260 + componentInset * 4,
+                            componentInset * 2,
+                            getWidth () - 260 - componentInset * 6,
+                            145,
+                            5);
 }
 
 void EuclydianAudioProcessorEditor::resized()
 {
     auto sliderSize = 130;
 
-    _tempoSlider.setBounds (componentInset, componentInset, sliderSize, sliderSize);
+    _tempoSlider.setBounds (componentInset * 2, componentInset * 2, sliderSize, sliderSize);
     _tempoLabel .setBounds (_tempoSlider.getX (), _tempoSlider.getBottom () - componentInset, sliderSize, 20);
     _tempoValueLabel.setBounds (_tempoSlider.getBounds ());
     
-    _stepsSlider.setBounds (getLocalBounds().getWidth() - (componentInset + sliderSize), componentInset, sliderSize, sliderSize);
+    _stepsSlider.setBounds (_tempoSlider.getRight () + componentInset, componentInset * 2, sliderSize, sliderSize);
     _stepsLabel.setBounds (_stepsSlider.getX (), _stepsSlider.getBottom () - componentInset, sliderSize, 20);
     _numStepsLabel.setBounds (_stepsSlider.getBounds ());
 
-    _euclydianComponent. setBounds (getWidth () / 4 ,
-                                    getHeight () / 2 - getWidth () / 4,
-                                    getWidth () / 2,
-                                    getWidth () / 2);
+    _title.setBounds (260 + componentInset * 4,
+                      componentInset * 2,
+                      getWidth () - 260 - componentInset * 6,
+                      145);
+
+    _euclydianComponent. setBounds (getWidth () / 2 - getHeight () / 4,
+                                    getHeight () / 2 - 75,
+                                    getHeight () / 2,
+                                    getHeight () / 2);
 }

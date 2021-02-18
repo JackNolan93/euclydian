@@ -29,6 +29,8 @@ private:
     juce::Slider _stepsSlider;
     juce::Label  _stepsLabel;
     juce::Label  _numStepsLabel;
+
+    juce::Label  _title { "Euclydian" };
     
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> speedAttachment;
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> stepsAttachment;
