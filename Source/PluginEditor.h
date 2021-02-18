@@ -25,9 +25,18 @@ public:
     void resized() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
-    EuclydianAudioProcessor& audioProcessor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EuclydianAudioProcessorEditor)
+
+    // This reference is provided as a quick way for your editor to
+    // access the processor object that created it.
+    EuclydianAudioProcessor & audioProcessor;
+
+    juce::Slider _stepsOnSlider;
+    juce::Label  _stepsOnLabel;
+    juce::Label  _stepsOnValue;
+
+    static constexpr int componentInset = 10;
+
+
 };
